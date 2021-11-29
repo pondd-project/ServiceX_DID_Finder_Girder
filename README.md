@@ -44,7 +44,7 @@ The last argument to `--rabbit-uri` is perhaps the most crucial - it defines the
 Once deployed locally, you can test the DID Finder by runnign the following command within the tests directory:
 
 ```
-python3 post.py yt.json {servicex_port}
+python3 post.py ${servicex_port} yt.json
 ```
 
 You will see the urls being returned from the did finder in logs of the did finder container.

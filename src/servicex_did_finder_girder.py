@@ -1,4 +1,3 @@
-import os
 from typing import Any, AsyncGenerator, Dict
 from servicex_did_finder_lib import start_did_finder
 import logging

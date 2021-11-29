@@ -1,0 +1,2 @@
+servicex-did-finder-lib
+requests

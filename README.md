@@ -28,7 +28,7 @@ spec:
       containers:
       - name: {{ .Release.Name }}-did-finder-girder
         image: {{ .Values.didFinderGirder.image }}:{{ .Values.didFinderGirder.tag }}
-        imagePullPolicy: {{ .Values.didFinderCERNOpenData.pullPolicy }}
+        imagePullPolicy: {{ .Values.didFinderGirder.pullPolicy }}
         env:
           - name: INSTANCE_NAME
             value: {{ .Release.Name }}

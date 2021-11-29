@@ -5,6 +5,14 @@
 
 This DID finder is designed to take a collection id (https://girder.hub.yt/#collections) as the did in ServiceX and yields the download url's for any folders found within the collection. If the collection has no folders, the download url for the collection is passed to the ServiceX transformer.
 
+## Build Image
+
+Build the docker image as:
+
+```bash
+% docker build -t servicex-did-finder-girder .
+```
+
 ## Deploying the DID Finder
 
 You'll need to create a k8 deployment file in order to run this DID finder. Here is a sample, built to be part of the `ServiceX` distribution:

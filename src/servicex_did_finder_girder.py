@@ -84,8 +84,9 @@ async def girder_did_finder(did_name: str,
             }
     except Exception as e:
         __log.info('Could not find dataset with id: {did_name}'.format(did_name=did_name))
+        __log.info('Error msg: {e}'.format(e=e))
 
-        
+
 def run_girder_did_finder():
     log = logging.getLogger(__name__)
 
@@ -95,6 +96,6 @@ def run_girder_did_finder():
     finally:
         log.info('Done running girder DID finder')
 
-        
+
 if __name__ == "__main__":
     run_girder_did_finder()

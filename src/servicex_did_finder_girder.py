@@ -33,14 +33,15 @@ import requests
 
 __log = logging.getLogger(__name__)
 
-async def girder_did_finder(did_name: str, 
+
+async def girder_did_finder(did_name: str,
                             info: Dict[str, Any]
                             ) -> AsyncGenerator[Dict[str, Any], None]:
     __log.info('DID Lookup request for collection {did_name}'.format(did_name=did_name),
-               extra = {"requestId": info['request-id']})
+               extra={"requestId": info['request-id']})
 
     root_url = "https://girder.hub.yt/api/v1/"
-    did,did_type = did_name.split('#')
+    did, did_type = did_name.split('#')
 
     try:
         if did_type == "collection":
@@ -81,9 +82,10 @@ async def girder_did_finder(did_name: str,
                 'file_size': 0,
                 'file_events': 0,
             }
-    except:
+    except Exception as e:
         __log.info('Could not find dataset with id: {did_name}'.format(did_name=did_name))
 
+        
 def run_girder_did_finder():
     log = logging.getLogger(__name__)
 
@@ -93,5 +95,6 @@ def run_girder_did_finder():
     finally:
         log.info('Done running girder DID finder')
 
+        
 if __name__ == "__main__":
     run_girder_did_finder()

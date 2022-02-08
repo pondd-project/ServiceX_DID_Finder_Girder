@@ -41,28 +41,59 @@ async def girder_did_finder(did_name: str,
                extra={"requestId": info['request-id']})
 
     root_url = "https://girder.hub.yt/api/v1/"
-    response = requests.get(root_url + "folder?parentType=collection&parentId={did_name}".format(
-            did_name=did_name))
+    check_did = did_name.split('#')
+    if len(check_did) == 1:
+        raise Exception(
+            'Must specify data type by appending #item, #folder, or #collection to your dataset id!')
+    else:
+        did, did_type = did_name.split('#')
+        # check for valid
+        if did_type not in ['item', 'folder', 'collection']:
+            raise Exception(
+                'Incorrect data type specified: {did_type}. Allowed data types are item, folder and collection.'.format(
+                    did_type=did_type))
+    try:
+        if did_type == "collection":
+            # try downloading as collection
+            response = requests.get(root_url + "folder?parentType=collection&parentId={did}".format(
+                    did=did))
 
-    if len(response.json()) == 0:
-        # download collection if folders not found
-        __log.info('No folders found with parentId: {did_name}!'.format(did_name=did_name))
-        yield {
-            'file_path': root_url + 'collection/{coll_id}/download'.format(
-                coll_id=did_name),
-            'adler32': 0,
-            'file_size': 0,
-            'file_events': 0,
+            if len(response.json()) == 0:
+                # download collection if folders not found
+                __log.info('No folders found with parentId: {did_name}!'.format(did_name=did_name))
+                yield {
+                    'file_path': root_url + 'collection/{coll_id}/download'.format(
+                        coll_id=did_name),
+                    'adler32': 0,
+                    'file_size': 0,
+                    'file_events': 0,
+                }
+            else:
+                # if folders found in collection, iterate and yield download uri for each folder
+                for folder in response.json():
+                    yield {
+                        'file_path': root_url + 'folder/{folder_id}/download'.format(folder_id=folder['_id']),
+                        'adler32': 0,
+                        'file_size': 0,
+                        'file_events': 0,
+                    }
+        if did_type == "folder":
+            yield {
+                'file_path': root_url + 'folder/{folder_id}/download'.format(folder_id=did),
+                'adler32': 0,
+                'file_size': 0,
+                'file_events': 0,
             }
-
-    # if folders found, iterate and yield download uri for each folder
-    for folder in response.json():
-        yield {
-            'file_path': root_url + 'folder/{folder_id}/download'.format(folder_id=folder['_id']),
-            'adler32': 0,
-            'file_size': 0,
-            'file_events': 0,
+        if did_type == "item":
+            yield {
+                'file_path': root_url + 'item/{item_id}/download'.format(item_id=did),
+                'adler32': 0,
+                'file_size': 0,
+                'file_events': 0,
             }
+    except Exception as e:
+        __log.info('Could not find dataset with id: {did_name}'.format(did_name=did_name))
+        __log.info('Error msg: {e}'.format(e=e))
 
 
 def run_girder_did_finder():

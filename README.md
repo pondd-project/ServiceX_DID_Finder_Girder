@@ -3,7 +3,9 @@
 
 ## Finding datasets
 
-This DID finder is designed to take a collection id (https://girder.hub.yt/#collections) as the did in ServiceX and yields the download url's for any folders found within the collection. If the collection has no folders, the download url for the collection is passed to the ServiceX transformer.
+This DID finder is designed to take a dataset id and data type (collection, folder, item) from (https://girder.hub.yt/#collections) as the DID in ServiceX and yields the download url's for any folders found within the collection. If a folder or item is passed, the download url for that datset is passed.If the collection has no folders, the download url for the collection is passed to the ServiceX transformer.If a folder or item is passed, the download url for that datset is passed.
+
+The DID takes the form: girder://<dataset_id>#<data_type>. An example can be found in tests/yt.json.
 
 ## Build Image
 

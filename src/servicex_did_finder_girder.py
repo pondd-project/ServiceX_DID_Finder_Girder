@@ -26,6 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import sys
 from typing import Any, AsyncGenerator, Dict
 from servicex_did_finder_lib import start_did_finder
 import logging
@@ -41,8 +42,18 @@ async def girder_did_finder(did_name: str,
                extra={"requestId": info['request-id']})
 
     root_url = "https://girder.hub.yt/api/v1/"
-    did, did_type = did_name.split('#')
+    check_did = did_name.split('#')
+    if len(check_did) == 1:
+        raise Exception(
+            'Must specify data type by appending #item, #folder, or #collection to your dataset id!')           
 
+    else:
+        did, did_type = did_name.split('#')
+        # check for valid 
+        if did_type not in ['item','folder','collection']:
+            raise Exception(
+                'Incorrect data type specified: {did_type}. Allowed data types are item, folder and collection.'.format(
+                        did_type=did_type))
     try:
         if did_type == "collection":
             # try downloading as collection
